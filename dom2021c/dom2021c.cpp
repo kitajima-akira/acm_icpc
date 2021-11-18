@@ -23,6 +23,7 @@ public:
 			delete e3;
 	}
 
+	// 文字列sitを根<root>として構文解析し、得られた情報をこのノードに設定する。
 	// <root> ::= <node> '+' <node> '+' <node>
 	//			| <node> '-' <node> '-' <node>
 	void parse_root(string::const_iterator sit) {
@@ -50,14 +51,17 @@ public:
 		}
 	}
 
+	// 根かどうか
 	bool is_root_node() const {
 		return parent == nullptr;
 	}
 
+	// 葉かどうか
 	bool is_leaf() const {
 		return '0' <= value && value <= '9';
 	}
 
+	// このノードを含めた木のすべてのノード(葉は除く)のリストを得る。
 	void get_node_list(vector<node*>& node_list) {
 		if (is_leaf())
 			return;  // 葉は登録しない。
@@ -74,26 +78,24 @@ public:
 	}
 
 	// 単純な計算 (答を得るまでの準備)
-	int calc() {
+	int calc() const {
 		if (is_leaf()) {
 			// 葉の場合
 			return value - '0';
 		}
-		else {
-			// ノードの場合
-			int v;
-			if (value == '+')
-				v = e1->calc() + e2->calc();
-			else // c == '-'
-				v = e1->calc() - e2->calc();
 
-			if (is_root_node()) {
-				v = (value == '+') ? v + e3->calc() : v - e3->calc();
-			}
-			return v;
+		// ノードの場合
+		int v = e1->calc();
+
+		v = (value == '+') ? v + e2->calc() : v - e2->calc();
+
+		if (is_root_node()) {
+			v = (value == '+') ? v + e3->calc() : v - e3->calc();
 		}
+		return v;
 	}
 
+	// このノードが根になるよう変形する。
 	void raise_to_root() {
 		if (is_root_node())
 			return;  // もうできている。
@@ -127,57 +129,47 @@ public:
 	}
 
 	// npからの木で最小・最大(max_resultでどちらか指定)となるスコア(計算値)を求める。
-	int calc_minmax(bool max_result) {
+	int calc_minmax(bool max_result) const {
 		if (is_leaf()) {
-			// 葉の場合
+			// *** 葉の場合
 			return value - '0';
 		}
-		else {
-			// ノードの場合
-			int v;
 
-			const int v1_max = e1->calc_minmax(true);
-			const int v1_min = e1->calc_minmax(false);
-			const int v2_max = e2->calc_minmax(true);
-			const int v2_min = e2->calc_minmax(false);
+		// *** ノードの場合
 
-			const int v3_max = is_root_node() ? e3->calc_minmax(true) : 0;
-			const int v3_min = is_root_node() ? e3->calc_minmax(false) : 0;
+		// 子ノードごとに最大値をそれぞれ求める。
+		const int v1_max = e1->calc_minmax(true);
+		const int v2_max = e2->calc_minmax(true);
+		const int v3_max = is_root_node() ? e3->calc_minmax(true) : 0;
 
-			if (value == '+') {
-				// 和は左右を入れ替えても変化しない。
-				v = v1_max + v2_max + v3_max;
-			}
-			else {  // value == '-'
-				if (!is_root_node()) {
-					// 途中ノード
-					// v1_max >= v1_min, v2_max >= v2_min
-					if (max_result) {
-						// max(v1 - v2, v2 - v1)
-						v = max(v1_max - v2_min, v2_max - v1_min);
-					}
-					else {
-						// min(v1 - v2, v2 - v1)
-						v = min(v1_min - v2_max, v2_min - v1_max);
-					}
-
-				}
-				else {  // 根ノード
-					// v1_max >= v1_min, v2_max >= v2_min, v3_max >= v3_min
-					if (max_result) {
-						// max(v1 - v2 - v3, v2 - v3 - v1, v3 - v1 - v2)
-						v = max(v1_max - v2_min - v3_min, v2_max - v3_min - v1_min);
-						v = max(v, v3_max - v1_min - v2_min);
-					}
-					else {
-						// min(v1 - v2 - v3, v2 - v3 - v1, v3 - v1 - v2)
-						v = min(v1_min - v2_max - v3_max, v2_min - v3_max - v1_max);
-						v = min(v, v3_min - v1_max - v2_max);
-					}
-				}
-			}
-			return v;
+		if (value == '+') {
+			// *** 加算の場合
+			return v1_max + v2_max + v3_max;  // 和は左右を入れ替えても変化しない。
 		}
+
+		// *** 減算の場合 (value == '-')
+
+		// 子ノードごとに最小値をそれぞれ求める。
+		const int v1_min = e1->calc_minmax(false);
+		const int v2_min = e2->calc_minmax(false);
+
+		if (!is_root_node()) {
+			// *** 途中ノードの場合
+			// v1_max >= v1_min, v2_max >= v2_min
+			return (max_result)
+				? max(v1_max - v2_min, v2_max - v1_min)   // max(v1 - v2, v2 - v1)
+				: min(v1_min - v2_max, v2_min - v1_max);  // min(v1 - v2, v2 - v1)
+		}
+
+		// *** 根ノードの場合
+		const int v3_min = e3->calc_minmax(false);
+
+		// v1_max >= v1_min, v2_max >= v2_min, v3_max >= v3_min
+		return (max_result)
+			?  // max(v1 - v2 - v3, v2 - v3 - v1, v3 - v1 - v2)
+			max(max(v1_max - v2_min - v3_min, v2_max - v3_min - v1_min), v3_max - v1_min - v2_min)
+			:  // min(v1 - v2 - v3, v2 - v3 - v1, v3 - v1 - v2) 
+			min(min(v1_min - v2_max - v3_max, v2_min - v3_max - v1_max), v3_min - v1_max - v2_max);
 	}
 
 	int solve_puzzle() {
@@ -236,8 +228,9 @@ private:
 				throw "missing )";
 			++sit;  // 「)」の次へ進める。
 		}
-		else
+		else {
 			throw "invalid charactor";
+		}
 		return np;
 	}
 };
