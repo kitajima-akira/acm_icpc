@@ -13,8 +13,9 @@ using namespace std;
 // 3つ組を表す型
 typedef tuple<int, int, int> part3;
 
-//3つ組を昇順に並べ替える。
-part3 sort(const part3 t) {
+// 3つ組tを昇順に並べ替える。
+// 並べ替えた3つ組を返す。
+part3 sort(const part3& t) {
 	const auto& [a, b, c] = t;
 	if (a <= b && a <= c) {
 		return (b <= c) ? part3{ a, b, c } : part3{ a, c, b };
@@ -48,6 +49,7 @@ void update_candidate(vector<part3>& candidate, int bi) {
 }
 
 // 新しい要素biをもとにcandidateを更新する。(候補削減なし)
+// どれだけ効率が違うか。
 void update_candidate_basic(vector<part3>& candidate, int bi) {
 	vector<part3> new_candidate;  // 新しい候補
 
@@ -66,9 +68,9 @@ void update_candidate_basic(vector<part3>& candidate, int bi) {
 
 // 与えられる子供の最大数を求める。
 int get_max_number_of_kids(vector<int> b) {
-	vector<part3> candidate(1, part3{ 0, 0, 0 });  // 分割ごとの風船の総和
+	vector<part3> candidate = { { 0, 0, 0 } };  // 分割ごとの風船の総和
 
-	// 候補を求める。
+	// bを一つずつ追加して、候補を更新する。
 	for (const auto& i : b) {
 		update_candidate(candidate, i);
 	}
@@ -76,9 +78,8 @@ int get_max_number_of_kids(vector<int> b) {
 	// 和の最小値の最大値を求める。
 	int k_max = 0;  // 求める最大値
 	for (const auto& t : candidate) {
-		const auto& [a, b, c] = t;
-		const int sum_min = min(min(a, b), c);  // 和の最小値
-		k_max = max(k_max, sum_min);
+		// t = [a, b, c]のとき、ソート済みなのでa <= b <= cだからaが最小値
+		k_max = max(k_max, get<0>(t));  
 	}
 
 	return k_max;
