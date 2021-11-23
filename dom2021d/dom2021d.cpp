@@ -1,5 +1,5 @@
 // dom2021d.cpp - 風船配り
-// https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html
+// https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html#section_D
 
 #include <algorithm>
 #include <iostream>
@@ -7,10 +7,10 @@
 #include <vector>
 using namespace std;
 
-// 風船を一つ除く。
+// 風船をk個除く。
 // 次のポール番号を返す。
-int remove_baloon(vector<int>& b, size_t i) {
-	if (--b[i] == 0)
+int remove_baloon(vector<int>& b, size_t i, int k = 1) {
+	if ((b[i] -= k) == 0)
 		b.erase(b.begin() + i);
 	else
 		i++;
@@ -21,14 +21,12 @@ int remove_baloon(vector<int>& b, size_t i) {
 int get_number_of_kids(vector<int> b) {
 	int k = 0;  // 与えられる子供の数
 	while (b.size() >= 3) {
-		k++;
-		size_t i = 0;  // 現在のポール
-		// 1個目
-		i = remove_baloon(b, i);
-		// 2個目
-		i = remove_baloon(b, i);
-		// 3個目
-		i = remove_baloon(b, i);
+		int m = min(min(b[0], b[1]), b[2]);
+		k += m;
+		// 風船がなくなったらポールも消すので2から0の順となる。
+		remove_baloon(b, 2, m);
+		remove_baloon(b, 1, m);
+		remove_baloon(b, 0, m);
 	}
 
 	return k;

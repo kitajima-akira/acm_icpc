@@ -1,5 +1,5 @@
-// dom2021d2.cpp - 風船配り
-// https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html
+// dom2021d3.cpp - 風船配り
+// https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html#section_D
 // 動的計画法で解く (改良版)
 // C++17 構造化束縛
 // https://icpc.iisf.or.jp/past-icpc/domestic2021/commentaries.html#D
