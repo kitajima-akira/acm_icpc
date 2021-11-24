@@ -5,6 +5,7 @@
 #include <vector>
 using namespace std;
 
+// ノードを表すクラス
 class node {
 public:
 	// ノードの初期値を設定する。
@@ -89,7 +90,8 @@ public:
 			e3->get_node_list(node_list);
 	}
 
-	// このノードが表す式の単純な(変形しない)計算値を得る。
+	// このノードが表す式の単純な(変形しない)計算を行う。
+	// 計算値を返す。
 	int calc() const {
 		if (is_leaf())
 			return get_leaf_value();
@@ -146,12 +148,12 @@ public:
 		parent = nullptr;
 	}
 
-	// このノードの木で最小・最大(max_resultでどちらか指定)となる計算値を求める。
+	// このノードの木で最小・最大(max_resultでどちらか指定)となる計算を行う。
+	// 計算値を返す。
 	int calc_minmax(bool max_result) {
-		if (is_leaf()) {
+		if (is_leaf())
 			// *** 葉の場合
-			return value - '0';
-		}
+			return get_leaf_value();
 
 		// キャッシュが利用できる場合
 		if (max_result) {
@@ -206,13 +208,13 @@ public:
 	// このノードを根とした木に対し、パズルを解く。
 	// 得られた答を返す。
 	int solve_puzzle() {
-		// 節のリストを作る。
+		// ノードのリストを作る。
 		vector<node*> node_list;
 		get_node_list(node_list);
 
 		int v = calc();
 
-		// 各節を根にした場合を作る。
+		// 各ノードを根にした場合を作る。
 		int i = 0;
 		for (const auto& np : node_list) {
 			np->raise_to_root();
