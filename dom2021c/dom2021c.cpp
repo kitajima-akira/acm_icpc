@@ -7,6 +7,7 @@ using namespace std;
 
 class node {
 public:
+	// ノードの初期値を設定する。
 	node(char c = 0):
 		value(c),
 		e1(nullptr),
@@ -18,6 +19,7 @@ public:
 		cached_max(false),
 		cache_max(0) {}
 
+	// デストラクタで子ノードを削除する。
 	~node() {
 		if (e1 != nullptr)
 			delete e1;
@@ -28,6 +30,7 @@ public:
 	}
 
 	// 文字列sitを根<root>として構文解析し、得られた情報をこのノードに設定する。
+	// 
 	// <root> ::= <node> '+' <node> '+' <node>
 	//			| <node> '-' <node> '-' <node>
 	void parse_root(string::const_iterator sit) {
@@ -55,14 +58,19 @@ public:
 		}
 	}
 
-	// 根かどうか
+	// このノードが根かどうか
 	bool is_root_node() const {
 		return parent == nullptr;
 	}
 
-	// 葉かどうか
+	// このノードが葉かどうか
 	bool is_leaf() const {
 		return '0' <= value && value <= '9';
+	}
+
+	// 葉の表す値を得る。
+	int get_leaf_value() const {
+		return value - '0';
 	}
 
 	// このノードを含めた木のすべてのノード(葉は除く)のリストを得る。
@@ -81,19 +89,21 @@ public:
 			e3->get_node_list(node_list);
 	}
 
-	// 単純な計算 (答を得るまでの準備)
+	// このノードが表す式の単純な(変形しない)計算値を得る。
 	int calc() const {
-		if (is_leaf()) {
-			// 葉の場合
-			return value - '0';
-		}
+		if (is_leaf())
+			return get_leaf_value();
 
 		// ノードの場合
+
+		// 左の子ノードの値を得る。
 		int v = e1->calc();
 
+		// 右(または根の中央)の子ノードの値を得て計算する。
 		v = (value == '+') ? v + e2->calc() : v - e2->calc();
 
 		if (is_root_node()) {
+			// 根の右の子ノードの値を得て計算する。
 			v = (value == '+') ? v + e3->calc() : v - e3->calc();
 		}
 		return v;
@@ -136,7 +146,7 @@ public:
 		parent = nullptr;
 	}
 
-	// npからの木で最小・最大(max_resultでどちらか指定)となるスコア(計算値)を求める。
+	// このノードの木で最小・最大(max_resultでどちらか指定)となる計算値を求める。
 	int calc_minmax(bool max_result) {
 		if (is_leaf()) {
 			// *** 葉の場合
@@ -193,6 +203,8 @@ public:
 			set_cache_min(min(min(v1_min - v2_max - v3_max, v2_min - v3_max - v1_max), v3_min - v1_max - v2_max));
 	}
 
+	// このノードを根とした木に対し、パズルを解く。
+	// 得られた答を返す。
 	int solve_puzzle() {
 		// 節のリストを作る。
 		vector<node*> node_list;
@@ -210,24 +222,37 @@ public:
 	}
 
 private:
-	char value;
-	node* e1;
-	node* e2;
-	node* e3;
-	node* parent;
-	bool cached_min;
-	int cache_min;
-	bool cached_max;
-	int cache_max;
+	// 今回のノードに関する情報
+	char value;  // ノードの種類(対応する文字)
+	node* e1;  // 左側の子ノード
+	node* e2;  // 右側(または根の中央)の子ノード
+	node* e3;  // 根の右側の子ノード
 
+	// 変形時に用いる情報
+	node* parent;  // 親ノード
+
+	// キャッシュ用
+	bool cached_min;  // 最小値のキャッシュが有効か
+	int cache_min;  // 最小値
+	bool cached_max;  // 最大値のキャッシュが有効か
+	int cache_max;  // 最大値
+
+	// 文字列sitから、演算子<operator>の構文解析を行う。
+	// 
 	// <operator> ::= '+' | '-'
+	// 
+	// 得られたオペレータを文字で返す。
 	char parse_operator(string::const_iterator& sit) {
 		if (*sit != '+' && *sit != '-')
 			throw "invalid operator";
 		return *(sit++);
 	}
 
-	// <non_root> ::= <node> <operator> <node> 
+	// 文字列sitから、根でないノード<non_root>の構文解析を行う。
+	// 
+	// <non_root> ::= <node> <operator> <node>
+	// 
+	// 構文解析により得られた情報で、このノードのe1, value, e2を設定する。
 	void parse_non_root(string::const_iterator& sit) {
 		// 一つ目のノード
 		e1 = parse_node(sit, this);
@@ -237,7 +262,14 @@ private:
 		e2 = parse_node(sit, this);
 	}
 
-	// <node> ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '(' <non_root> ')' 
+	// 文字列sitから、ノード(葉も含む)<node>の構文解析を行う。
+	// 
+	// <node> ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' 
+	//			| '(' <non_root> ')'
+	//
+	// ノードを新たに作成し、そのノードへのポインタを返す。
+	// 葉の場合はvalueを設定する。
+	// 根でないノードの場合は<non_root>を構文解析し、parentを引数のparentpに設定する。
 	node* parse_node(string::const_iterator& sit, node* parentp) {
 		node* np = new node();
 		if ('0' <= *sit && *sit <= '9') {
@@ -260,18 +292,23 @@ private:
 		return np;
 	}
 
+	// 最小値vをキャッシュに残す。
+	// 値vをそのまま返す。
 	int set_cache_min(int v) {
 		cached_min = true;
 		cache_min = v;
 		return v;
 	}
 
+	// 最大値vをキャッシュに残す。
+	// 値vをそのまま返す。
 	int set_cache_max(int v) {
 		cached_max = true;
 		cache_max = v;
 		return v;
 	}
 
+	// このノードのキャッシュを無効にする。
 	void clear_cache() {
 		cached_min = false;
 		cached_max = false;
