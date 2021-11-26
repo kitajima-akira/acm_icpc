@@ -6,32 +6,32 @@
 #include <vector>
 using namespace std;
 
-int lucky_number(vector<int> a) {
-	if (a.size() == 1)
-		return a[0];
-
+// ラッキーナンバーを求める。
+// aのbeg以降を対象とする。
+// aは更新される。
+// ラッキーナンバーを返す。
+int lucky_number(vector<int>& a, vector<int>::iterator beg) {
 	// 昇順に並べ替える。
-	sort(a.begin(), a.end());
+	sort(beg, a.end());
 
-	// 空の椀を除く。
-	while (a[0] == 0)
-		a.erase(a.begin());
+	// 空(値が0)の椀を飛ばす。
+	auto min_non_zero_p = find_if_not(beg, a.end(), [](const int& x) { return x == 0; });
 
-	// 一番少ない椀のビー玉の個数を得る。
-	const int m = a[0];
+	const int m = *min_non_zero_p;  // 一番少ない椀のビー玉の個数
 
-	// 先頭以外の椀からm減らす。
-	for (auto i = a.begin() + 1; i != a.end(); ++i) {
-		*i -= m;
-	}
+	if (min_non_zero_p + 1 == a.end())  // 空でない椀が一つだけ
+		return m;  // 残ったビー玉の個数があなたの今日のラッキーナンバー
 
-	return lucky_number(a);
+	// first_non_zero以外の椀からm減らす。
+	for_each(min_non_zero_p + 1, a.end(), [&m](int& x) { x -= m; });
+
+	return lucky_number(a, min_non_zero_p);  // 再帰的に繰り返す。
 }
 
 int main() {
 	for (int a1, a2, a3, a4; (cin >> a1 >> a2 >> a3 >> a4) && (a1 || a2 || a3 || a4); ) {
 		vector<int> a = { a1, a2, a3, a4 };
-		cout << lucky_number(a) << endl;
+		cout << lucky_number(a, a.begin()) << endl;
 	}
 	return 0;
 }
