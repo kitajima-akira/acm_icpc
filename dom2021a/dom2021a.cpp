@@ -10,7 +10,7 @@ using namespace std;
 // aのbeg以降を対象とする。
 // aは更新される。
 // ラッキーナンバーを返す。
-int lucky_number(vector<int>& a, vector<int>::iterator beg) {
+int lucky_number(vector<int>& a, const vector<int>::iterator& beg) {
 	// 昇順に並べ替える。
 	sort(beg, a.end());
 
