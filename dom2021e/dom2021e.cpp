@@ -21,69 +21,68 @@ using namespace std;
 //           2^35 >               > 2 * 10^10
 // 35回以上乗る場合は待ち時間最短は乗車回数が少ない経路
 
-constexpr long long int R = 1000000000ll + 7ll;
+constexpr long long int R = 1000000000LL + 7LL;
+constexpr int wait_threshold = 35;
 
-typedef tuple<unsigned long long int, unsigned long long int, unsigned long long int> long_time;
+typedef tuple<int, long long int> taxi_time;
 
-long_time to_long_time(unsigned long long int v) {
-	return { 0, 0, v };
+long long int round(long long int v) {
+	return (v >= R) ? v % R : v;
 }
 
-long_time operator+(long_time lt1, long_time lt2) {
-	auto& [w1_2, w1_1, w1_0] = lt1;
-	auto& [w2_2, w2_1, w2_0] = lt2;
+taxi_time operator+(taxi_time tt1, taxi_time tt2) {
+	auto& [nt1, et1] = tt1;
+	auto& [nt2, et2] = tt2;
 
-	// ブロックごとの加算
-	auto w0 = w1_0 + w2_0;
-	auto w1 = w1_1 + w2_1;
-	auto w2 = w1_2 + w2_2;
+	auto nt = nt1 + nt2;
+	auto et = et1 + et2;
 
-	// 桁上がり
-	if (w0 >= R) {
-		w1 += w0 / R;
-		w0 %= R;
-	}
-
-	if (w1 >= R) {
-		w2 += w1 / R;
-		w1 %= R;
-	}
-
-	if (w2 >= R)
-		w2 = 1;  // 正しい値ではないが、あふれるのでそれでも続けられるようにする。
-
-	return { w2, w1, w0 };
+	return { nt, round(et) };
 }
 
-long_time operator+=(long_time& lt1, long_time lt2) {
-	return lt1 = lt1 + lt2;
+ostream& operator<<(ostream& os, const taxi_time& tt) {
+	auto& [nt, et] = tt;
+	return os << "[" << nt <<  " " << et << "]";
 }
 
-long_time operator++(long_time& lt) {
-	return lt = lt + lt;
+// 乗車回数k回のとき、総待ち時間は 2^(k + 1) - 1
+long long int total_wait_time(int n_taxi) {
+	constexpr int bit_width = sizeof(long long int) * 8 - 1;
+
+	if (n_taxi < bit_width)
+		return (1LL << n_taxi) - 1;
+
+	long long int w = round((1LL << (bit_width - 1)) - 1);
+	for (int i = bit_width - 1; i < n_taxi; i++)
+		w = round(2 * (w + 1) - 1);
+	return w;
 }
 
-ostream& operator<<(ostream& os, const long_time& lt) {
-	auto& [w2, w1, w0] = lt;
-	return os << "[" << w2 << " " << w1 << " " << w0 << "]";
+long long int total_transit_time(taxi_time tt) {
+	auto& [nt, et] = tt;
+	return et + round(total_wait_time(nt));
 }
 
-bool less_than(int n_taxi1, long_time lt1, int n_taxi2, long_time lt2) {
-	auto& [w1_2, w1_1, w1_0] = lt1;
-	auto& [w2_2, w2_1, w2_0] = lt2;
-	if (w1_2 == 0 && w2_2 == 0)
-		return lt1 < lt2;
+bool less_than(taxi_time tt1, taxi_time tt2) {
+	auto& [nt1, et1] = tt1;
+	auto& [nt2, et2] = tt2;
 
-	if (w1_1 != 0 && w2_1 == 0)
+	if (nt1 == nt2)
+		return et1 < et2;
+
+	if (nt1 < wait_threshold && nt2 < wait_threshold)
+		// この条件では待ち時間が長くても丸めてはいけない。
+		return et1 + total_wait_time(nt1) < et2 + total_wait_time(nt2);
+
+	if (nt1 >= wait_threshold && nt2 < wait_threshold)
 		return false;
 
-	if (w1_1 == 0 && w2_1 != 0)
+	if (nt1 < wait_threshold && nt2 >= wait_threshold)
 		return true;
 
-	//if (w1_1 != 0 && w2_1 != 0)
-	if (n_taxi1 == n_taxi2)
-		return lt1 < lt2;
-	return n_taxi1 < n_taxi2;
+	// if (nt1 >= wait_threshold && nt2 >= wait_threshold && nt1 != nt2) 
+
+	return nt1 < nt2;
 }
 
 class node;
@@ -126,18 +125,18 @@ ostream& operator<<(ostream& os, const edge& e) {
 		: os << e.node1 << " -(" << e.get_transit_time() << ")-> " << e.node2 << endl;
 }
 
-// <回数, 全時間, 乗車中か, 前のノード>
-typedef tuple<int, long_time, bool, int> state;
+// <時間, 乗車中か, 前のノード>
+typedef tuple<taxi_time, bool, int> state;
 
 // state出力用関数 (デバッグ用)
 ostream& operator<<(ostream& os, const state& s) {
-	const auto& [n_taxi, total_time, onboard, id] = s;
-	return os << "<" << n_taxi << ", " << total_time << ", " << onboard << "> " << id;
+	const auto& [total_time, onboard, id] = s;
+	return os << "<" << total_time << ", " << onboard << "> " << id;
 }
 
 class node {
 public:
-	node():
+	node() :
 		id(0),
 		edge_list(),
 		state_list() {
@@ -156,11 +155,13 @@ public:
 		// そこを通ったときの状態を登録する。
 		for (auto& ep : edge_list) {
 			const int opposite_id = ep->get_opposite_node(id);
-			int si = 0;
 			for (const auto& s : state_list) {
-				const auto& [n, lt, o, i] = s;
+				const auto& [tt, o, i] = s;
+				if (opposite_id == i)  // 一度行って戻る
+					continue;  // 登録する必要なし
+				const auto& [n, et] = tt;
 				int n_taxi = n;
-				auto new_lt = lt + to_long_time(ep->get_transit_time());
+				auto new_et = et + ep->get_transit_time();
 				bool onboard = o;
 
 				if (ep->get_type() == edge::road_type::SIDEWALK) {  // 歩道
@@ -169,28 +170,28 @@ public:
 				else {  // 車道
 					if (!onboard) {
 						// 新しく乗車を開始する。
-						new_lt += wait_taxi(n_taxi);
 						n_taxi++;
 						onboard = true;
 					}
 				}
 //				cerr << opposite_id << ": ";
-				if (node_list[opposite_id].add_state(n_taxi, new_lt, onboard, id, si))
+				if (node_list[opposite_id].add_state({ n_taxi, new_et }, onboard, id))
 					node_id_list.insert(opposite_id);
-				si++;
 			}
 		}
 	}
 
-	bool add_state(int n_taxi, long_time total_time, bool onboard, int id, int sid) {
+	bool add_state(taxi_time total_time, bool onboard, int id) {
 		// これまでに登録された状態と比べて明らかに遅くなる場合は登録しない。
-		if (!is_new_state(n_taxi, total_time, onboard))
+		if (!is_new_state(total_time, onboard))
 			return false;
 
 		// すでに登録されている状態が今回のより悪い場合は削除する。
 		for (auto it = state_list.begin(); it != state_list.end(); ) {
-			const auto& [n, tt, o, i] = *it;
-			if (o == onboard && n_taxi <= n && !less_than(n, tt, n_taxi, total_time)) {  // onboardが共通で、回数・時間が共に小さい。
+			const auto& [tt, o, i] = *it;
+			if (o == onboard 
+				&& get<0>(tt) >= get<0>(total_time)
+				&& !less_than(tt, total_time)) {  // onboardが共通で、回数・時間が共に小さい。
 //				cerr << "remove: ";
 //				cerr << *it;
 //				cerr << " by " << state{n_taxi, total_time, onboard} << endl;
@@ -202,26 +203,25 @@ public:
 		}
 
 		// 登録する。
-		state_list.push_back({ n_taxi, total_time, onboard, id });
+		state_list.push_back({ total_time, onboard, id });
 		return true;
 	}
 
-	unsigned long long int get_min_transit_time() {
+	long long int get_min_transit_time() {
 		if (state_list.empty())
 			return -1;
 
 		// state_listに登録されているtotal_timeの最小値を得る。
-		long_time m = get<1>(state_list[0]);
-		int n = get<0>(state_list[0]);
+		taxi_time m = get<0>(state_list[0]);
 
 		for (const auto& s : state_list) {
-			const auto& [n_taxi, total_time, onboard, i] = s;
-			if (less_than(n_taxi, total_time, n, m)) {
+			const auto& [total_time, onboard, i] = s;
+//			cerr << "goal: " << total_transit_time(total_time) << endl;
+			if (less_than(total_time, m)) {
 				m = total_time;
-				n = n_taxi;
 			}
 		}
-		return get<2>(m);
+		return total_transit_time(m);
 	}
 
 	friend ostream& operator<<(ostream& os, const node& n);
@@ -234,22 +234,13 @@ private:
 	// 探索用データ
 	vector<state> state_list;
 
-	long_time wait_taxi(int n_taxi) {
-//		cout << "n_taxi = " << n_taxi;
-		long_time t = to_long_time(1);
-
-		while (n_taxi-- >= 1)
-			++t;
-
-//		cout << ", t = " << t << endl;
-		return t;
-	}
-
 	// これまでに登録された状態と比べて明らかに遅くならないか?
-	bool is_new_state(int n_taxi, long_time total_time, bool onboard) {
+	bool is_new_state(taxi_time total_time, bool onboard) {
 		for (const auto& s : state_list) {
-			const auto& [n, tt, o, i] = s;
-			if (o == onboard && n <= n_taxi && !less_than(n_taxi, total_time, n, tt))  // onboardが共通で、回数・時間が共に大きい。
+			const auto& [tt, o, i] = s;
+			if (o == onboard 
+				&& get<0>(total_time) >= get<0>(tt) 
+				&& !less_than(total_time, tt))  // onboardが共通で、回数・時間が共に大きい。
 				return false;  // 登録しない。
 		}
 		return true;
@@ -301,7 +292,7 @@ public:
 
 	long long int get_min_transit_time(int id_begin, int id_end) {
 		// 開始地点を初期設定する。
-		node_list[id_begin].add_state(0, to_long_time(0), false, 0, 0);
+		node_list[id_begin].add_state({ 0, 0 }, false, 0);
 
 		// 探索する。(各ノードの最短時間を求める)
 		explore(id_begin);
@@ -341,8 +332,7 @@ ostream& operator<<(ostream& os, const time_flies& tf) {
 }
 
 int main() {
-
-	for (int n, p, q; (cin >> n >> p >> q) && (n != 0 || p != 0 || q != 0);) {
+	for (int n, p, q; (cin >> n >> p >> q) && (n || p || q);) {
 		time_flies tf(n, p, q);
 		for (int i = 0; i < p; i++) {
 			int a, b, c;
