@@ -24,7 +24,7 @@ using namespace std;
 constexpr long long int R = 1000000000LL + 7LL;
 constexpr int wait_threshold = 35;
 
-typedef tuple<int, long long int> taxi_time;
+typedef pair<int, long long int> taxi_time;
 
 long long int round(long long int v) {
 	return (v >= R) ? v % R : v;
