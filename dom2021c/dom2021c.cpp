@@ -5,30 +5,55 @@
 #include <vector>
 using namespace std;
 
+class tree3_node {
+public:
+	tree3_node() :
+		left_child(nullptr),
+		middle_child(nullptr),
+		right_child(nullptr),
+		parent(nullptr) {}
+
+	~tree3_node() {
+		if (left_child != nullptr)
+			delete left_child;
+		if (middle_child != nullptr)
+			delete middle_child;
+		if (right_child != nullptr)
+			delete right_child;
+	}
+
+	// このノードが根かどうか
+	bool is_root() const {
+		return parent == nullptr;
+	}
+
+	// このノードが葉かどうか
+	bool is_leaf() const {
+		return !left_child && !middle_child && !right_child;
+	}
+
+protected:
+	tree3_node* left_child;  // 子ノード1
+	tree3_node* middle_child;  // 子ノード2
+	tree3_node* right_child;  // 子ノード3
+	tree3_node* parent;  // 親ノード
+};
+
 // ノードを表すクラス
-class node {
+class node : public tree3_node {
 public:
 	// ノードの初期値を設定する。
 	node(char c = 0):
 		value(c),
-		e1(nullptr),
-		e2(nullptr),
-		e3(nullptr),
-		parent(nullptr),
 		cached_min(false),
 		cache_min(0),
 		cached_max(false),
 		cache_max(0) {}
 
-	// デストラクタで子ノードを削除する。
-	~node() {
-		if (e1 != nullptr)
-			delete e1;
-		if (e2 != nullptr)
-			delete e2;
-		if (e3 != nullptr)
-			delete e3;
-	}
+	node* get_left_child() const { return static_cast<node*>(left_child); }
+	node* get_middle_child() const { return static_cast<node*>(middle_child); }
+	node* get_right_child() const { return static_cast<node*>(right_child); }
+	node* get_parent() const { return static_cast<node*>(parent); }
 
 	// 文字列sitを根<root>として構文解析し、得られた情報をこのノードに設定する。
 	// 
@@ -37,13 +62,13 @@ public:
 	void parse_root(string::const_iterator sit) {
 		try {
 			// 一つ目のノード
-			e1 = parse_node(sit, this);
+			left_child = parse_node(sit, this);
 
 			// 演算子
 			const char first_op = parse_operator(sit);
 
 			// 二つ目のノード
-			e2 = parse_node(sit, this);
+			middle_child = parse_node(sit, this);
 
 			// 演算子
 			value = parse_operator(sit);
@@ -51,22 +76,12 @@ public:
 				throw "mismatch operators in root";
 
 			// 三つ目のノード
-			e3 = parse_node(sit, this);
+			right_child = parse_node(sit, this);
 		}
 		catch (const string& s) {
 			cout << "wrong format: " << s << endl;
 			exit(1);
 		}
-	}
-
-	// このノードが根かどうか
-	bool is_root_node() const {
-		return parent == nullptr;
-	}
-
-	// このノードが葉かどうか
-	bool is_leaf() const {
-		return '0' <= value && value <= '9';
 	}
 
 	// 葉の表す値を得る。
@@ -83,11 +98,11 @@ public:
 		node_list.push_back(this);
 
 		// 子ノードを再帰的に登録
-		e1->get_node_list(node_list);
-		e2->get_node_list(node_list);
+		get_left_child()->get_node_list(node_list);
+		get_middle_child()->get_node_list(node_list);
 
-		if (is_root_node())
-			e3->get_node_list(node_list);
+		if (is_root())
+			get_right_child()->get_node_list(node_list);
 	}
 
 	// このノードが表す式の単純な(変形しない)計算を行う。
@@ -99,52 +114,52 @@ public:
 		// ノードの場合
 
 		// 左の子ノードの値を得る。
-		int v = e1->calc();
+		int v = get_left_child()->calc();
 
 		// 右(または根の中央)の子ノードの値を得て計算する。
-		v = (value == '+') ? v + e2->calc() : v - e2->calc();
+		v = (value == '+') ? v + get_middle_child()->calc() : v - get_middle_child()->calc();
 
-		if (is_root_node()) {
+		if (is_root()) {
 			// 根の右の子ノードの値を得て計算する。
-			v = (value == '+') ? v + e3->calc() : v - e3->calc();
+			v = (value == '+') ? v + get_right_child()->calc() : v - get_right_child()->calc();
 		}
 		return v;
 	}
 
 	// このノードが根になるよう変形する。
 	void raise_to_root() {
-		if (is_root_node())
+		if (is_root())
 			return;  // もうできている。
 
 		// 一つ上の節(parent)を根にする。
-		parent->raise_to_root();
+		get_parent()->raise_to_root();
 
 		// キャッシュはクリアする。
-		parent->clear_cache();
+		get_parent()->clear_cache();
 		clear_cache();
 
-		// このノードをparentの左(e1)によせる。
-		if (this == parent->e2) {
-			node* tp = parent->e1;
-			parent->e1 = this;
-			parent->e2 = tp;
+		// このノードをparentの左(left_child)によせる。
+		if (this == get_parent()->middle_child) {
+			auto tp = get_parent()->left_child;
+			get_parent()->left_child = this;
+			get_parent()->middle_child = tp;
 		}
-		else if (this == parent->e3) {
-			node* tp = parent->e1;
-			parent->e1 = this;
-			parent->e3 = tp;
+		else if (this == get_parent()->right_child) {
+			auto tp = get_parent()->left_child;
+			get_parent()->left_child = this;
+			get_parent()->right_child = tp;
 		}
 
 		// このノードを根にする。
 
 		// parentを下になるよう変形
-		parent->e1 = parent->e2;
-		parent->e2 = parent->e3;
-		parent->e3 = nullptr;
-		parent->parent = this;
+		get_parent()->left_child = get_parent()->middle_child;
+		get_parent()->middle_child = get_parent()->right_child;
+		get_parent()->right_child = nullptr;
+		get_parent()->parent = this;
 
 		// このノードをparentの親の根に
-		e3 = parent;
+		right_child = parent;
 		parent = nullptr;
 	}
 
@@ -168,14 +183,14 @@ public:
 		// *** ノードの場合
 
 		// 子ノードごとに最大値をそれぞれ求める。
-		const int v1_max = e1->calc_minmax(true);
-		const int v1_min = e1->calc_minmax(false);
+		const int v1_max = get_left_child()->calc_minmax(true);
+		const int v1_min = get_left_child()->calc_minmax(false);
 
-		const int v2_max = e2->calc_minmax(true);
-		const int v2_min = e2->calc_minmax(false);
+		const int v2_max = get_middle_child()->calc_minmax(true);
+		const int v2_min = get_middle_child()->calc_minmax(false);
 
-		const int v3_max = is_root_node() ? e3->calc_minmax(true) : 0;
-		const int v3_min = is_root_node() ? e3->calc_minmax(false) : 0;
+		const int v3_max = is_root() ? get_right_child()->calc_minmax(true) : 0;
+		const int v3_min = is_root() ? get_right_child()->calc_minmax(false) : 0;
 
 
 		if (value == '+') {
@@ -187,7 +202,7 @@ public:
 
 		// *** 減算の場合 (value == '-')
 
-		if (!is_root_node()) {
+		if (!is_root()) {
 			// *** 途中ノードの場合
 			// v1_max >= v1_min, v2_max >= v2_min
 			return (max_result)
@@ -226,12 +241,6 @@ public:
 private:
 	// 今回のノードに関する情報
 	char value;  // ノードの種類(対応する文字)
-	node* e1;  // 左側の子ノード
-	node* e2;  // 右側(または根の中央)の子ノード
-	node* e3;  // 根の右側の子ノード
-
-	// 変形時に用いる情報
-	node* parent;  // 親ノード
 
 	// キャッシュ用
 	bool cached_min;  // 最小値のキャッシュが有効か
@@ -254,14 +263,14 @@ private:
 	// 
 	// <non_root> ::= <node> <operator> <node>
 	// 
-	// 構文解析により得られた情報で、このノードのe1, value, e2を設定する。
+	// 構文解析により得られた情報で、このノードのe1, value, middle_childを設定する。
 	void parse_non_root(string::const_iterator& sit) {
 		// 一つ目のノード
-		e1 = parse_node(sit, this);
+		left_child = parse_node(sit, this);
 		// 演算子
 		value = parse_operator(sit);
 		// 二つ目のノード
-		e2 = parse_node(sit, this);
+		middle_child = parse_node(sit, this);
 	}
 
 	// 文字列sitから、ノード(葉も含む)<node>の構文解析を行う。
@@ -272,7 +281,7 @@ private:
 	// ノードを新たに作成し、そのノードへのポインタを返す。
 	// 葉の場合はvalueを設定する。
 	// 根でないノードの場合は<non_root>を構文解析し、parentを引数のparentpに設定する。
-	node* parse_node(string::const_iterator& sit, node* parentp) {
+	tree3_node* parse_node(string::const_iterator& sit, node* parentp) {
 		node* np = new node();
 		if ('0' <= *sit && *sit <= '9') {
 			// 葉の場合
