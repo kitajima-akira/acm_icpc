@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dom2021a", "dom2021a\dom202
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dom2021b", "dom2021b\dom2021b.vcxproj", "{A5A22C22-63F1-43B7-B9E8-BE49F232E7A8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dom2021f", "dom2021f\dom2021f.vcxproj", "{D640D776-FF3D-4AEB-BF23-C174530FBFC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{A5A22C22-63F1-43B7-B9E8-BE49F232E7A8}.Release|x64.Build.0 = Release|x64
 		{A5A22C22-63F1-43B7-B9E8-BE49F232E7A8}.Release|x86.ActiveCfg = Release|Win32
 		{A5A22C22-63F1-43B7-B9E8-BE49F232E7A8}.Release|x86.Build.0 = Release|Win32
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Debug|x64.ActiveCfg = Debug|x64
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Debug|x64.Build.0 = Debug|x64
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Debug|x86.ActiveCfg = Debug|Win32
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Debug|x86.Build.0 = Debug|Win32
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Release|x64.ActiveCfg = Release|x64
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Release|x64.Build.0 = Release|x64
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Release|x86.ActiveCfg = Release|Win32
+		{D640D776-FF3D-4AEB-BF23-C174530FBFC6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
