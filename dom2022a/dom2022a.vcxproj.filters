@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dom2020b2.cpp">
+    <ClCompile Include="dom2022a.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
