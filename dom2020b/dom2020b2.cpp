@@ -36,27 +36,20 @@ private:
 };
 
 int main() {
-	for (;;) {
-		int m;  // 利用者の人数
-		int n;  // 記録の件数
-		int p;  // 感染が確認された利用者のID
-
-		cin >> m >> n >> p;
-
-		if (m == 0 && n == 0 && p == 0)
-			break;
-
-		infection_tracking it(m);
-		// 感染者を登録
+	for (int m, n, p;  // m 利用者の人数, n 記録の件数, p 感染が確認された利用者のID 
+		(cin >> m >> n >> p) && (m != 0 || n != 0 || p != 0); ) {
+		infection_tracking it(m);  // 追跡データ
+		// 感染者の登録
 		it.set_infected(p - 1);  // 番号pは1から始まるので一つずらす。
 
+		// データの読み出しと登録
 		for (int i = 0; i < n; i++) {
 			int a, b;  // 濃厚接触者の利用者ID
 			cin >> a >> b;
 			it.update(a - 1, b - 1);
 		}
 
-		// 感染者数を出力
+		// 感染者数の出力
 		cout << it.get_num_infected() << endl;
 	}
 	return 0;
