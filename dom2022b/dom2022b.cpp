@@ -1,4 +1,5 @@
 // dom2022b.cpp - ACM ICPC 2022 ‘“à—\‘IB ’N‚Ğ‚Æ‚èæ‚èc‚³‚È‚¢
+// https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_B
 
 #include <algorithm>
 #include <iostream>
