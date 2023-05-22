@@ -1,27 +1,31 @@
 // dom2022a.cpp - ACM ICPC 2022 国内予選A 感染ピークの回数
+// https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_A
 
 #include <iostream>
+#include <vector>
 using namespace std;
+
+// データの並びaのピーク数を求める。
+int count_peak(const vector<int>& a) {
+	int peak_count = 0;
+	// 三つの並び i, i + 1, i + 2 を一つずつずらして順に比較
+	for (size_t i = 0; i + 2 < a.size(); i++) { 
+		if (a[i + 1] > a[i] && a[i + 1] > a[i + 2]) { // a[i + 1] が前後より大きい
+			peak_count++;
+		}
+	}
+	return peak_count;
+}
 
 int main() {
 	for (int n; cin >> n && n > 0;) {  // nはデータの個数
-		int v;  // 読み込んだデータ
-		cin >> v;
-		int prevprev = v;  // 2回前のデータ
-		cin >> v;
-		int prev = v;  // 1回前のデータ
-		int npeak = 0;  // ピークの回数
-		for (int i = 0; i < n - 2; i++) {  // 先頭の二つを除いて繰り返す。
-			// データを一つ読み込み、一つ前がピークだったか確認する。
+		vector<int> positive_cases(n);  // 日ごとの新規陽性者数
+		// データを読み込む。
+		for (auto& v : positive_cases) {  // vは格納する要素
 			cin >> v;
-			if (prevprev < prev && v < prev)
-				npeak++;
-
-			// データを更新する。
-			prevprev = prev;
-			prev = v;
 		}
-		cout << npeak << endl;
+		int peak_count = count_peak(positive_cases);
+		cout << peak_count << endl;
 	}
 	return 0;
 }

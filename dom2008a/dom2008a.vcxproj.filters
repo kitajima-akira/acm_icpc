@@ -15,11 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-<<<<<<<< HEAD:dom2022c/dom2022c.vcxproj.filters
-    <ClCompile Include="dom2022c.cpp">
-========
-    <ClCompile Include="dom2011b.cpp">
->>>>>>>> 00499c6eccfbc9689c236e443a2afe5981ef786f:dom2011b/dom2011b.vcxproj.filters
+    <ClCompile Include="dom2008a.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
