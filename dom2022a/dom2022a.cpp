@@ -9,11 +9,10 @@ using namespace std;
 int count_peak(const vector<int>& a) {
 	int peak_count = 0;
 	// 三つの並び i, i + 1, i + 2 を一つずつずらして順に比較
-	for (size_t i = 0; i + 2 < a.size(); i++) { 
-		if (a[i + 1] > a[i] && a[i + 1] > a[i + 2]) { // a[i + 1] が前後より大きい
+	for (size_t i = 0; i + 2 < a.size(); i++)
+		if (a[i + 1] > a[i] && a[i + 1] > a[i + 2])  // a[i + 1] が前後より大きい
 			peak_count++;
-		}
-	}
+
 	return peak_count;
 }
 
@@ -21,11 +20,10 @@ int main() {
 	for (int n; cin >> n && n > 0;) {  // nはデータの個数
 		vector<int> positive_cases(n);  // 日ごとの新規陽性者数
 		// データを読み込む。
-		for (auto& v : positive_cases) {  // vは格納する要素
+		for (auto& v : positive_cases)  // vは格納する要素
 			cin >> v;
-		}
-		int peak_count = count_peak(positive_cases);
-		cout << peak_count << endl;
+
+		cout << count_peak(positive_cases) << endl;
 	}
 	return 0;
 }
