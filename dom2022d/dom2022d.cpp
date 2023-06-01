@@ -1,7 +1,7 @@
 // dom2022d.cpp - [ACM ICPC 2022 D] 入場待ちの行列
 // https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_D
 
-// Sample Inputが138分程度で終了
+// ほぼ総当りに近いため、数値が大きくなると制限時間内に終わらない。
 
 #include <iostream>
 #include <vector>

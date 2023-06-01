@@ -1,11 +1,7 @@
 // dom2022d2.cpp - [ACM ICPC 2022 D] 入場待ちの行列
 // https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_D
-// Sample Input 2分30秒程度 (最適化なし)
-// Sample Input 1分程度 (最適化O2)
-// Visual Studio 2019の最適化設定
-// プロジェクトのプロパティ
-// * C/C++ > 最適化 の「最適化」を「最大最適化(速度を優先) (/O2)」
-// * C/C++ > コード生成 の「基本ランタイム チェック」を「既定」
+
+// 多小の枝苅りはしているものの、基本的に総当たりのため、大きい数値では制限時間内に終わらない。
 
 #include <iostream>
 #include <vector>
