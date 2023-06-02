@@ -1,3 +1,4 @@
-D*
-!*.cpp
-!*.h
+bigint/
+Expected/
+Work/
+error_log.txt

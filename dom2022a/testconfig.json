@@ -1,30 +1,27 @@
 {
-    "testCommand": "../run.bat",
+    "testCommand": "../../run.bat",
     "workDirectoryName": "Work",
     "expectedDirectoryName": "Expected",
     "logFileName": "error_log.txt",
+    "defaultSourceDirectory": "../../data2022",
     "testCase": [
         {
             "inputFiles": ["A1"],
-            "sourceDirectory": "../../data2022",
             "arguments": ["A1", "A1.ans"],
             "outputFiles": ["A1.ans"]
         },
         {
             "inputFiles": ["A2"],
-            "sourceDirectory": "../../data2022",
             "arguments": ["A2", "A2.ans"],
             "outputFiles": ["A2.ans"]
         },
         {
             "inputFiles": ["A3"],
-            "sourceDirectory": "../../data2022",
             "arguments": ["A3", "A3.ans"],
             "outputFiles": ["A3.ans"]
         },
         {
             "inputFiles": ["A4"],
-            "sourceDirectory": "../../data2022",
             "arguments": ["A4", "A4.ans"],
             "outputFiles": ["A4.ans"]
         }

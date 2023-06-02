@@ -1,0 +1,29 @@
+{
+    "testCommand": "../../run.bat",
+    "workDirectoryName": "Work",
+    "expectedDirectoryName": "Expected",
+    "logFileName": "error_log.txt",
+    "defaultSourceDirectory": "../../data2022",
+    "testCase": [
+        {
+            "inputFiles": ["B1"],
+            "arguments": ["B1", "B1.ans"],
+            "outputFiles": ["B1.ans"]
+        },
+        {
+            "inputFiles": ["B2"],
+            "arguments": ["B2", "B2.ans"],
+            "outputFiles": ["B2.ans"]
+        },
+        {
+            "inputFiles": ["B3"],
+            "arguments": ["B3", "B3.ans"],
+            "outputFiles": ["B3.ans"]
+        },
+        {
+            "inputFiles": ["B4"],
+            "arguments": ["B4", "B4.ans"],
+            "outputFiles": ["B4.ans"]
+        }
+    ]
+}
