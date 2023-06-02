@@ -15,7 +15,7 @@
 #include <numeric>
 #include <set>
 #include <vector>
-#include "bigint/newbigint.h"
+#include "bigint-library/newbigint.h"
 using namespace std;
 
 // begin [‘g‚İ‡‚í‚¹] ///////////////////////////////////////////////////////////////
