@@ -177,7 +177,6 @@ Push-Location -Path $WorkDirectory
                 $stat.ng += 1
                 $stat.ngList += $out
                 $stat.ngLog += "* $out`n$log`n`n"
-                code -diff $out $expectedOutput
             } else {
                 Write-Host "OK" -ForegroundColor Green
                 $stat.ok += 1
