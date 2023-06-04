@@ -3,6 +3,8 @@
 // ‰ğà https://icpc.iisf.or.jp/past-icpc/domestic2021/commentaries.html#F
 // ‹­˜AŒ‹¬•ª•ª‰ğ‚ÌˆÓ–¡‚ÆƒAƒ‹ƒSƒŠƒYƒ€ https://manabitimes.jp/math/1250
 // C++17
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
 // -----------------------------------------------------------------------------
 #include <iostream>
 #include <queue>

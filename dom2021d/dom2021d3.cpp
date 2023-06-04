@@ -3,6 +3,8 @@
 // 動的計画法で解く (改良版)
 // C++17 構造化束縛
 // https://icpc.iisf.or.jp/past-icpc/domestic2021/commentaries.html#D
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
 
 #include <algorithm>
 #include <iostream>

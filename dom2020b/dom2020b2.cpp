@@ -1,5 +1,7 @@
 // dom2020b2.cpp - ê⁄êGí«ê’(vector<bool>î≈)
 // https://icpc.iisf.or.jp/past-icpc/domestic2020/contest/all_ja.html#section_B
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
 #include <algorithm>
 #include <iostream>
 #include <vector>

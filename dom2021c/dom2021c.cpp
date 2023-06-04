@@ -1,5 +1,8 @@
 // dom2021c.cpp - –Ø•ÏŒ`ƒpƒYƒ‹
 // https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html#section_C
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
+
 #include <iostream>
 #include <string>
 #include <vector>

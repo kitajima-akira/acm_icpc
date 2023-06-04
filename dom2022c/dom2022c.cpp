@@ -1,5 +1,8 @@
 // dom2022c.cpp - [ACM ICPC 2022 C] ICPC ‚ÉŒü‚¯‚Ä‚Ì—ûK“ú’ö
 // https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_C
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
+
 #include <iostream>
 #include <utility>
 using namespace std;

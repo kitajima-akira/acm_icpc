@@ -1,0 +1,29 @@
+{
+    "testCommand": "../../run.bat",
+    "workDirectoryName": "Work",
+    "expectedDirectoryName": "Expected",
+    "logFileName": "error_log.txt",
+    "defaultSourceDirectory": "../../data2019/C",
+    "testCase": [
+        {
+            "inputFiles": ["C1"],
+            "arguments": ["C1", "C1.ans"],
+            "outputFiles": ["C1.ans"]
+        },
+        {
+            "inputFiles": ["C2"],
+            "arguments": ["C2", "C2.ans"],
+            "outputFiles": ["C2.ans"]
+        },
+        {
+            "inputFiles": ["C3"],
+            "arguments": ["C3", "C3.ans"],
+            "outputFiles": ["C3.ans"]
+        },
+        {
+            "inputFiles": ["C4"],
+            "arguments": ["C4", "C4.ans"],
+            "outputFiles": ["C4.ans"]
+        }
+    ]
+}

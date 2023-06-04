@@ -1,5 +1,7 @@
 // dom2020a2.cpp - カウントアップ2020
 // https://icpc.iisf.or.jp/past-icpc/domestic2020/contest/all_ja.html#section_A
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
 
 #include <algorithm>
 #include <iostream>

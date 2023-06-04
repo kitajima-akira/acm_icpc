@@ -1,5 +1,7 @@
 // dom2022d3.cpp - [ACM ICPC 2022 D] 入場待ちの行列
 // https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_D
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
 //
 // コロナ禍での特別ルールのため、事前準備が可能
 // 

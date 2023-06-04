@@ -1,5 +1,7 @@
 // dom2022a.cpp - ACM ICPC 2022 国内予選A 感染ピークの回数
 // https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_A
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
 
 #include <iostream>
 #include <vector>

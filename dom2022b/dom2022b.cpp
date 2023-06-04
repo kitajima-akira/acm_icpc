@@ -1,5 +1,7 @@
 // dom2022b.cpp - ACM ICPC 2022 ‘“à—\‘IB ’N‚Ğ‚Æ‚èæ‚èc‚³‚È‚¢
 // https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_B
+// Copyright 2023 Kitajima Akira
+// Author: Kitajima Akira <kitajima@osakac.ac.jp>
 
 #include <algorithm>
 #include <iostream>
