@@ -4,7 +4,7 @@
 
  問題 | ファイル名 | テスト
 ---|---|:---:
- [2019年A](https://icpc.iisf.or.jp/past-icpc/domestic2019/contest/all_ja.html#section_A) | dom2019a/dom2019a.cpp | ○
+ [2019年A](https://icpc.iisf.or.jp/past-icpc/domestic2019/contest/all_ja.html#section_A) | dom2019a/dom2019a2.cpp | ○
  [2019年B](https://icpc.iisf.or.jp/past-icpc/domestic2019/contest/all_ja.html#section_B) | dom2019b/dom2019b.cpp | ○
  [2019年C](https://icpc.iisf.or.jp/past-icpc/domestic2019/contest/all_ja.html#section_C) | dom2019c/dom2019c.cpp | ○
  [2020年A](https://icpc.iisf.or.jp/past-icpc/domestic2020/contest/all_ja.html#section_A)* | dom2020a/dom2020a2.cpp | ○
