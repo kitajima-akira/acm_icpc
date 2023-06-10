@@ -19,13 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dom2018b.cpp" />
+    <ClCompile Include="dom2018c.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{55adff63-b6c7-43ea-b7e4-14f9ace2e9e2}</ProjectGuid>
-    <RootNamespace>dom2018b</RootNamespace>
+    <ProjectGuid>{92fc4584-a71a-4bf9-9322-197eb041c294}</ProjectGuid>
+    <RootNamespace>dom2018c</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
