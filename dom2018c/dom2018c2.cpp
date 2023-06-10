@@ -1,5 +1,5 @@
 // dom2018c.cpp - ACM ICPC 2018年国内予選C - 超高層ビル「みなとハルカス」
-// https://icpc.iisf.or.jp/past-icpc/domestic2018/contest/all_ja.html#section_B
+// https://icpc.iisf.or.jp/past-icpc/domestic2018/contest/all_ja.html#section_C
 // Copyright 2023 Kitajima Akira
 // Author: Kitajima Akira <kitajima@osakac.ac.jp>
 
