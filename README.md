@@ -5,6 +5,8 @@
  問題 | ファイル名 | テスト
 ---|---|:---:
  [2017年A](https://icpc.iisf.or.jp/past-icpc/domestic2017/contest/all_ja.html#section_A) | dom2017a/dom2017a2.cpp | ○
+ [2017年B](https://icpc.iisf.or.jp/past-icpc/domestic2017/contest/all_ja.html#section_B) | dom2017b/dom2017b.cpp | ○
+ [2017年C](https://icpc.iisf.or.jp/past-icpc/domestic2017/contest/all_ja.html#section_C) | dom2017c/dom2017c.cpp | ○
  [2018年A](https://icpc.iisf.or.jp/past-icpc/domestic2018/contest/all_ja.html#section_A) | dom2018a/dom2018a.cpp | ○
  [2018年B](https://icpc.iisf.or.jp/past-icpc/domestic2018/contest/all_ja.html#section_B) | dom2018b/dom2018b.cpp | ○
  [2018年C](https://icpc.iisf.or.jp/past-icpc/domestic2018/contest/all_ja.html#section_C) | dom2018c/dom2018c.cpp | ○
