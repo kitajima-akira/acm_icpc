@@ -11,6 +11,7 @@ using namespace std;
 // 位置 (行, 列)
 using position = pair<int, int>;
 
+// 池のある公園を解くクラス
 class pond {
 public:
 	pond (int d, int w):
@@ -24,26 +25,25 @@ public:
 		hmap[p.first][p.second] = val;
 	}
 
-	int capacity() {
+	// 池の最大容量を計算する。
+	int get_capacity() {
 		int c = 0;
-		for (int bj = 0; bj < depth - 2; bj++) {
-			for (int bi = 0; bi < width - 2; bi++) {
+		// 開始位置と長方形の対角の位置を順にずらして全パターンを調べる。
+		for (int bj = 0; bj < depth - 2; bj++)
+			for (int bi = 0; bi < width - 2; bi++)
 				// 開始位置 bj行目, bi列目
-				for (int ej = bj + 2; ej < depth; ej++) {
-					for (int ei = bi + 2; ei < width; ei++) {
-						// 開始位置 ej行目, ei列目
+				for (int ej = bj + 2; ej < depth; ej++)
+					for (int ei = bi + 2; ei < width; ei++)
+						// 対角位置 ej行目, ei列目
 						c = max(c, capacity({ bj, bi }, { ej, ei }));
-					}
-				}
-			}
-		}
+
 		return c;
 	}
 
 private:
-	int depth;
-	int width;
-	vector<vector<int>> hmap;
+	int depth;  // 池の奥行き
+	int width;  // 池の幅
+	vector<vector<int>> hmap;  // 各セルの高さ
 
 	// 枠の標高の最小値を求める。
 	int outermost_height(const position& bp, const position& ep) {
@@ -66,18 +66,22 @@ private:
 		return height;
 	}
 
+	// 与えられた、対角となる2頂点内の容量を計算する。
 	int capacity(const position& bp, const position& ep) {
-		int origin = outermost_height(bp, ep);  // 容量を計る基点の高さ
+		// 池の周辺部の高さの最小値を得る。
+		const int origin = outermost_height(bp, ep);  // 容量を計る基点の高さ
+
+		// 各セルの容量の総和を求める。
 		int total = 0;  // 全容量
 		try {
 			// 各セルの容量を順に求める。
 			for_each(hmap.begin() + bp.first + 1, hmap.begin() + ep.first, [&](const auto& line) {
 				for_each(line.begin() + bp.second + 1, line.begin() + ep.second, [&](const auto& e) {
-					int c = origin - e;  // そのセルの容量
-					if (e >= origin) {  // 1箇所でも周り以上なら
+					if (e >= origin)  // 1箇所でも周り以上なら
 						throw 0;  // 溢れる。
-					}
-					total += c;
+
+					// そのセルの容量を追加する。
+					total += origin - e;  
 				});
 			});
 		}
@@ -91,7 +95,7 @@ private:
 
 int main() {
 	for (int d, w;  // 用地の奥行き, 幅 
-		cin >> d >> w, d > 0 && w > 0;) {
+		cin >> d >> w && d > 0 && w > 0;) {
 		pond p(d, w);
 		for (int j = 0; j < d; j++)
 			for (int i = 0; i < w; i++) {
@@ -99,7 +103,7 @@ int main() {
 				cin >> e;
 				p.set({ j, i }, e);
 			}
-		cout << p.capacity() << endl;
+		cout << p.get_capacity() << endl;
 	}
 	return 0;
 }
