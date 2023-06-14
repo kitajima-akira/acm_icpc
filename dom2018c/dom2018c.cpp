@@ -4,10 +4,11 @@
 // Author: Kitajima Akira <kitajima@osakac.ac.jp>
 
 #include <functional>
+#include <utility>
 #include <iostream>
 using namespace std;
 
-// f(i) = 0 に最も近いi (i_min <= i <= i_max)を見つける。
+// f(i) = 0に最も近いi (i_min <= i <= i_max)を見つける。
 // f()は範囲内で単調増加でなければならない。
 // iと計算値f(i)を返す。
 template<typename T, class F>
@@ -31,6 +32,7 @@ pair<T, T> approximate(F f, T i_min, T i_max) {
 	return { i_min, r };
 }
 
+// 予算bに対して問題を解く。
 pair<int, int> solve(int b) {
 	const long long int b2 = b * 2LL;
 
