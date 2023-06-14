@@ -10,17 +10,20 @@ using namespace std;
 
 using price_list_t = vector<int>;
 
-/** 表plの中から、金額mを超えない(異なる)二つを選ぶ。
+/** 
+ * 表plの中から、金額mを超えない(異なる)二つを選ぶ。
  * @param pl 値段の表
  * @param m  金額の上限
  * @return 合計値 (0なら見つからなかった)
  */
 int choice(const price_list_t& pl, int m) {
+	// 表を並べ替える。
 	price_list_t list = pl;  // 並べ替え用の変数
 	sort(list.begin(), list.end());  // 値段の表を安い順に並べ替える。
 
+	// 二つのうち、安い方をi、高い方をjとして、順に合計値がmを超えない範囲で、合計値の最大値を見つける。
 	int total_max = 0;  // 現在のm以下で最大の合計値
-						// (初期値を見つからなかったときの値とする。)
+						// (初期値を見つからなかったときの値0とする。)
 	for (size_t i = 0; (i < list.size() - 1) 
 						&& (list[i] + list[i + 1] <= m); i++) { // 一つ目としてiを選ぶ。
 		int total;		// 合計金額
