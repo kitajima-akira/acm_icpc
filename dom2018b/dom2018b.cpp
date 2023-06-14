@@ -7,6 +7,7 @@
 #include <vector>
 using namespace std;
 
+// 「折り紙」を解くクラス
 class origami {
 public:
 	origami(int n, int m) :
@@ -37,9 +38,8 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const origami& o) {
 		for (auto line : o.paper) {
 			os << ": ";
-			for (int piece : line) {
+			for (int piece : line)
 				os << " " << piece;
-			}
 			os << endl;
 		}
 		return os;
@@ -61,12 +61,12 @@ private:
 			for (int i = 0; i < line.size() - c; i++)
 				line[i] = line[i + c];
 		}
+
 		current_width = 2 * c <= current_width ? current_width - c : c;
 		// なくなった部分を0で埋める。
-		for (auto& line : paper) {
+		for (auto& line : paper)
 			for (int i = current_width; i < line.size(); i++)
 				line[i] = 0;
-		}
 	}
 
 	// 横に折る。
@@ -80,16 +80,13 @@ private:
 
 		// 折った部分だけシフトする。
 		for (int i = 0; i < paper.size() - c; i++)
-			//				for (int j = 0; j < paper[i].size(); j++)
 			paper[i] = paper[i + c];
 
 		current_height = 2 * c <= current_height ? current_height - c : c;
 		// なくなった部分を0で埋める。
-		for (int j = current_height; j < paper.size(); j++) {
-			for (auto& piece : paper[j]) {
+		for (int j = current_height; j < paper.size(); j++)
+			for (auto& piece : paper[j])
 				piece = 0;
-			}
-		}
 	}
 };
 
@@ -103,7 +100,6 @@ int main() {
 			int d, c;
 			cin >> d >> c;
 			o.fold(d, c);
-//			cout << o << endl;
 		}
 
 		// 入力の指定どおりに穴を開ける。
