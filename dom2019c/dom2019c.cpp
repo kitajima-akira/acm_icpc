@@ -11,6 +11,7 @@
 #include <vector>
 using namespace std;
 
+// 天秤を解くためのクラス
 class BalanceScale {
 public:
     /**
@@ -87,22 +88,19 @@ private:
         multiset<int> case_dontuse = get_additional(a, wl);  // 置かない。
 
         // すべてのリストをマージして返す。(C++17ではmultisetでmergeが使える。)
-        for (int a: case_dontuse) {
+        for (int a: case_dontuse)
             case_otherside.emplace(a);
-        }
-        for (int a: case_otherside) {
+
+        for (int a: case_otherside)
             case_sameside.emplace(a);
-        }
+
         return case_sameside;
     }
 };
 
 int main() {
-    for (;;) {
-        int n, m;  // 計量リスト中の薬品量の数とセット中の分銅の個数
-        cin >> n >> m;
-        if (n == 0 && m == 0)
-            break;
+    for (int n, m;  // 計量リスト中の薬品量の数とセット中の分銅の個数
+        cin >> n >> m && (n > 0 || m > 0);) {
         BalanceScale b;
         for (int i = 0; i < n; i++) {
             int a;
