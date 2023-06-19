@@ -8,6 +8,17 @@
 #include <vector>
 using namespace std;
 
+// data中のsequnceの出現回数を数える。
+int count_sequence(const vector<int>& data, const vector<int>& sequence) {
+	int c = 0;  // 出現回数
+	for (auto it = data.begin();
+		(it = search(it, data.end(), sequence.begin(), sequence.end())) != data.end();
+		++it) {
+		c++;
+	}
+	return c;
+}
+
 int main() {
 	const vector<int> a2020 = { 2, 0, 2, 0 };  // 検索対象データ
 
@@ -16,13 +27,7 @@ int main() {
 		for (int& i : d)
 			cin >> i;
 
-		int c = 0;  // 出現回数
-		for (auto it = d.begin();
-			(it = search(it, d.end(), a2020.begin(), a2020.end())) != d.end(); 
-			++it) {
-			c++;
-		}
-		cout << c << endl;
+		cout << count_sequence(d, a2020) << endl;
 	}
 	return 0;
 }
