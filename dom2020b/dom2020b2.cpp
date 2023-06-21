@@ -7,19 +7,27 @@
 #include <vector>
 using namespace std;
 
+// 接触追跡を解くクラス
 class infection_tracking {
 public:
-	infection_tracking(int m): 
-		infected_table(m, false) {}
-
-	void set_infected(int p) {
-		infected_table[p] = true;
+	// コンストラクタ
+	// 利用者m人、感染者ID idで初期設定する。
+	infection_tracking(int m, int id): 
+		infected_table(m, false) {
+		set_infected(id);
 	}
 
-	bool is_infected(int p) {
-		return infected_table[p];
+	// IDを感染者として登録する。
+	void set_infected(int id) {
+		infected_table[id - 1] = true;  // IDは1からなので、インデックスは1減らす。
 	}
 
+	// IDが感染者として登録されているか。
+	bool is_infected(int id) const {
+		return infected_table[id - 1];  // IDは1からなので、インデックスは1減らす。
+	}
+
+	// aとbが濃厚接触としてデータを更新する。
 	void update(int a, int b) {
 		// aとbのどちらかが感染者なら、反対も登録
 		if (is_infected(a))
@@ -28,7 +36,8 @@ public:
 			set_infected(a);
 	}
 
-	int get_num_infected() {
+	// 感染者数を返す。
+	int get_num_infected() const {
 		return count(infected_table.begin(), infected_table.end(), true);
 	}
 
@@ -40,15 +49,14 @@ private:
 int main() {
 	for (int m, n, p;  // m 利用者の人数, n 記録の件数, p 感染が確認された利用者のID 
 		(cin >> m >> n >> p) && (m != 0 || n != 0 || p != 0); ) {
-		infection_tracking it(m);  // 追跡データ
 		// 感染者の登録
-		it.set_infected(p - 1);  // 番号pは1から始まるので一つずらす。
+		infection_tracking it(m, p);  // 追跡データ
 
 		// データの読み出しと登録
 		for (int i = 0; i < n; i++) {
 			int a, b;  // 濃厚接触者の利用者ID
 			cin >> a >> b;
-			it.update(a - 1, b - 1);
+			it.update(a, b);
 		}
 
 		// 感染者数の出力
