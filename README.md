@@ -15,7 +15,6 @@
  [2019年C 天秤](https://icpc.iisf.or.jp/past-icpc/domestic2019/problems/ja/contest/all_ja.html#section_C) | [dom2019c/dom2019c.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2019c/dom2019c.cpp) | ○
  [2020年A カウント~~ダウン~~アップ 2020](https://icpc.iisf.or.jp/past-icpc/domestic2020/contest/all_ja.html#section_A)* | [dom2020a/dom2020a2.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2020a/dom2020a2.cpp) | ○
  [2020年B 接触追跡](https://icpc.iisf.or.jp/past-icpc/domestic2020/contest/all_ja.html#section_B)* | [dom2020b/dom2020b2.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2020b/dom2020b2.cpp) | ○
- [2020年C 荷物](https://icpc.iisf.or.jp/past-icpc/domestic2020/contest/all_ja.html#section_C)* | [dom2020c/dom2020c4.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2020c/dom2020c4.cpp) | ○
  [2021年A ビー玉占い](https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html#section_A)* | [dom2021a/dom2021a.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2021a/dom2021a.cpp) | ○
  [2021年B 百ます計算パズル](https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html#section_B)* | [dom2021b/dom2021b.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2021b/dom2021b.cpp) | ○
  [2021年C 木変形パズル](https://icpc.iisf.or.jp/past-icpc/domestic2021/contest/all_ja.html#section_C)* | [dom2021c/dom2021c.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2021c/dom2021c.cpp) | ○
