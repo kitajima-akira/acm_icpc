@@ -13,18 +13,18 @@
 using namespace std;
 
 // 3つ組を表す型
-typedef tuple<int, int, int> part3;
+using part3 = tuple<int, int, int>;
 
 // 3つ組tを昇順に並べ替える。
 // 並べ替えた3つ組を返す。
 part3 sort(const part3& t) {
 	const auto& [a, b, c] = t;
-	if (a <= b && a <= c) {
+	if (a <= b && a <= c)
 		return (b <= c) ? part3{ a, b, c } : part3{ a, c, b };
-	}
-	else if (b <= a && b <= c) {
+
+	else if (b <= a && b <= c)
 		return (a <= c) ? part3{ b, a, c } : part3{ b, c, a };
-	}
+
 	return (a <= b) ? part3{ c, a, b } : part3{ c, b, a };
 }
 
@@ -35,7 +35,7 @@ void update_candidate(vector<part3>& candidate, int bi) {
 	// 新しい候補を追加
 	for (const auto& t : candidate) {
 		const auto& [a, b, c] = t;
-		// 各候補は、重複をなくすため、並ベ変えておく。
+		// 各候補は、重複をなくすため、並ベ替えておく。
 		new_candidate.push_back(sort({ a + bi, b, c }));
 		new_candidate.push_back(sort({ a, b + bi, c }));
 		new_candidate.push_back(sort({ a, b, c + bi }));
@@ -73,16 +73,14 @@ int get_max_number_of_kids(vector<int> b) {
 	vector<part3> candidate = { { 0, 0, 0 } };  // 分割ごとの風船の総和
 
 	// bを一つずつ追加して、候補を更新する。
-	for (const auto& i : b) {
+	for (const auto& i : b)
 		update_candidate(candidate, i);
-	}
 
 	// 和の最小値の最大値を求める。
 	int k_max = 0;  // 求める最大値
-	for (const auto& t : candidate) {
+	for (const auto& t : candidate)
 		// t = [a, b, c]のとき、ソート済みなのでa <= b <= cだからaが最小値
-		k_max = max(k_max, get<0>(t));  
-	}
+		k_max = max(k_max, get<0>(t));
 
 	return k_max;
 }
