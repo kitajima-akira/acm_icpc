@@ -30,6 +30,9 @@ constexpr int wait_threshold = 35;  // 待ち時間が長くなるしきい値
 
 // 移動時間だけならlong long intの範囲に収まる。
 
+//
+// タクシーに乗った時間
+//
 struct taxi_time {
 	int n_taxi;  // タクシー乗車回数
 	long long int travel_time;  // 待ち時間を含まない移動時間の合計
@@ -43,6 +46,7 @@ ostream& operator<<(ostream& os, const taxi_time& tt) {
 	return os << "[" << tt.n_taxi <<  " " << tt.travel_time << "]";
 }
 
+// 乗車回数n_taxi回のときの総待ち時間を計算する。(問題で設定されている、不要な上位は省く。)
 // 乗車回数k回のとき、総待ち時間は 2^(k + 1) - 1
 long long int total_wait_time(int n_taxi) {
 	constexpr int bit_width = sizeof(long long int) * 8 - 1;
@@ -56,11 +60,13 @@ long long int total_wait_time(int n_taxi) {
 	return w;
 }
 
+// タクシー利用時間ttをもとに、待ち時間も含めた全移動時間を計算する。
+// (問題で設定されている、不要な上位は省く。)
 long long int total_transit_time(taxi_time tt) {
 	return tt.travel_time + omit_upper(total_wait_time(tt.n_taxi));
 }
 
-//bool less_than(taxi_time tt1, taxi_time tt2) {
+// タクシーに乗った時間の比較(<)
 bool operator<(const taxi_time& tt1, const taxi_time& tt2) {
 	if (tt1.n_taxi == tt2.n_taxi)
 		return tt1.travel_time < tt2.travel_time;
@@ -78,11 +84,13 @@ bool operator<(const taxi_time& tt1, const taxi_time& tt2) {
 	return tt1.n_taxi < tt2.n_taxi;
 }
 
+// タクシーに乗った時間の比較(>=)
 bool operator>=(const taxi_time& tt1, const taxi_time& tt2) {
 	return !(tt1 < tt2);
 }
 
-class node;
+// 節と枝でグラフを作る。
+class node; 
 
 // 枝 (道)
 class edge {
@@ -134,6 +142,7 @@ ostream& operator<<(ostream& os, const state& s) {
 	return os << "<" << s.total_time << ", " << s.onboard << "> " << s.id;
 }
 
+// 節 (タクシースタンド)
 class node {
 public:
 	node() :
@@ -257,16 +266,15 @@ ostream& operator<<(ostream& os, const node& n) {
 
 class time_flies {
 public:
-	// nnノード数, 
+	// n ノード(タクシースタンド)数, p 歩道数, q 車道数 
 	time_flies(int n, int p, int q) :
 		node_list(n),
 		n_sidewalk(p),
 		edge_list(p + q) {
 
 		int i = 0;
-		for (auto& n : node_list) {
+		for (auto& n : node_list)
 			n.set_id(i++);
-		}
 	}
 
 	void add_sidewalk(int id, int a, int b, int c) {
