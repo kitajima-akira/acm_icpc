@@ -8,6 +8,7 @@
 
  問題 | ファイル名 | テスト
 ---|---|:---:
+ [2016年A 被験者の選定](https://icpc.iisf.or.jp/past-icpc/domestic2016/problems/all_ja.html#section_A) | [dom2016a/dom2016a.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2016a/dom2016a.cpp) | ○
  [2017年A 太郎君の買物](https://icpc.iisf.or.jp/past-icpc/domestic2017/contest/all_ja.html#section_A) | [dom2017a/dom2017a2.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2017a/dom2017a2.cpp) | ○
  [2017年B ほとんど同じプログラム](https://icpc.iisf.or.jp/past-icpc/domestic2017/contest/all_ja.html#section_B) | [dom2017b/dom2017b.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2017b/dom2017b.cpp) | ○
  [2017年C 池のある庭園](https://icpc.iisf.or.jp/past-icpc/domestic2017/contest/all_ja.html#section_C) | [dom2017c/dom2017c.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2017c/dom2017c.cpp) | ○
