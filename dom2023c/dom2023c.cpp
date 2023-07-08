@@ -39,64 +39,6 @@ public:
 		}
 	}
 
-	// 番号current_noとその番号の位置を決めた上で成否を再帰的に調べる。
-	bool explore(int current_no, const position& pos) {
-		// 決めた番号に隣接する番号のリストadjacent_listを得る。
-		auto adjacent_list = queue[current_no];
-		vector<int> rest_adjacent_list;  // 未割当て分の番号リスト
-		for (const auto adj_no : adjacent_list) {
-			if (fixed_list.find(adj_no) != fixed_list.end()) {
-				// すでに割り当てられているので、番号についてはcurrent_noとの距離をチェックする。
-				if (manhattan_distance(pos, fixed_list[adj_no]) < min_distance) //   短かければ
-					return false;  // 割当て失敗
-			} else {
-				// 未割当てに追加する。
-				rest_adjacent_list.push_back(adj_no);
-			}
-		}
-
-		// 空いている席の中からcurrent_noのposから決められた距離以上離れた席のリストcandidate_seat_listを得る。
-		vector<position> candidate_seat_list;
-		for (auto& pos2 : empty_seat_list)
-			if (manhattan_distance(pos, pos2) >= min_distance)
-				candidate_seat_list.push_back(pos2);
-	
-		// rest_listの個数よりcandidate_seat_listの個数が少なければ割当て失敗
-		if (rest_adjacent_list.size() > candidate_seat_list.size())
-			return false;
-
-		// 隣接番号の配置が完了していれば、次は残りの中から決める。
-		if (candidate_seat_list.empty())
-			candidate_seat_list = empty_seat_list;
-
-		// current_noをposに割り当てる。
-		// cout << "> " << current_no << " (" << pos.first << ", " << pos.second << ")" << endl;
-		work_map[pos.first][pos.second] = current_no;
-		fixed_list[current_no] = pos;
-		empty_seat_list.erase(find(empty_seat_list.begin(), empty_seat_list.end(), pos));
-		auto saved_list = queue[current_no];
-		queue.erase(current_no);
-
-		// 次の番号を決める。
-		if (queue.empty())  // 次が無ければ成功
-			return true;
-		int next_no = rest_adjacent_list.empty() ? queue.begin()->first : rest_adjacent_list.front();
-
-		// 次の位置を決める。
-		for (auto& next_pos : candidate_seat_list)
-			if (explore(next_no, next_pos))
-				return true;
-
-		// すべての位置で失敗したので割り当てを取り消す。
-		// cout << "NG> " << current_no << " (" << pos.first << ", " << pos.second << ")" << endl;
-		work_map[pos.first][pos.second] = 0;
-		fixed_list.erase(current_no);
-		empty_seat_list.push_back(pos);
-		queue[current_no] = saved_list;
-
-		return false;
-	}
-
 	// 席替えする。
 	seat_map& rearrange() {
 		// 一つ目は次の部分だけでよい。（反転等すると同じになるので）
@@ -117,6 +59,7 @@ public:
 		return *this;
 	}
 
+	// 表示用
 	friend ostream& operator<<(ostream& os, const seat_map& s) {
 		for (int row = 0; row < s.n; row++) {
 			os << s.original_map[row][0];
@@ -152,6 +95,65 @@ private:
 		// 下
 		if (row < n - 1)
 			adjacent_list.push_back(original_map[row + 1][col]);
+	}
+
+	// 番号current_noとその番号の位置を決めた上で成否を再帰的に調べる。
+	bool explore(int current_no, const position& pos) {
+		// 決めた番号に隣接する番号のリストadjacent_listを得る。
+		auto adjacent_list = queue[current_no];
+		vector<int> rest_adjacent_list;  // 未割当て分の番号リスト
+		for (const auto adj_no : adjacent_list) {
+			if (fixed_list.find(adj_no) != fixed_list.end()) {
+				// すでに割り当てられているので、番号についてはcurrent_noとの距離をチェックする。
+				if (manhattan_distance(pos, fixed_list[adj_no]) < min_distance) //   短かければ
+					return false;  // 割当て失敗
+			}
+			else {
+				// 未割当てに追加する。
+				rest_adjacent_list.push_back(adj_no);
+			}
+		}
+
+		// 空いている席の中からcurrent_noのposから決められた距離以上離れた席のリストcandidate_seat_listを得る。
+		vector<position> candidate_seat_list;
+		for (auto& pos2 : empty_seat_list)
+			if (manhattan_distance(pos, pos2) >= min_distance)
+				candidate_seat_list.push_back(pos2);
+
+		// rest_listの個数よりcandidate_seat_listの個数が少なければ割当て失敗
+		if (rest_adjacent_list.size() > candidate_seat_list.size())
+			return false;
+
+		// 隣接番号の配置が完了していれば、次は残りの中から決める。
+		if (candidate_seat_list.empty())
+			candidate_seat_list = empty_seat_list;
+
+		// current_noをposに割り当てる。
+		// cout << "> " << current_no << " (" << pos.first << ", " << pos.second << ")" << endl;
+		work_map[pos.first][pos.second] = current_no;
+		fixed_list[current_no] = pos;
+		empty_seat_list.erase(find(empty_seat_list.begin(), empty_seat_list.end(), pos));
+		auto saved_list = queue[current_no];
+		queue.erase(current_no);
+
+		// 次の番号を決める。
+		if (queue.empty())  // 次が無ければ成功
+			return true;
+		int next_no = rest_adjacent_list.empty() ? queue.begin()->first : rest_adjacent_list.front();
+
+		// 次の位置を決める。
+		for (auto& next_pos : candidate_seat_list)
+			if (explore(next_no, next_pos))
+				return true;
+
+		// すべての位置で失敗したので割り当てを取り消す。
+		// cout << "NG> " << current_no << " (" << pos.first << ", " << pos.second << ")" << endl;
+		work_map[pos.first][pos.second] = 0;
+		fixed_list.erase(current_no);
+		empty_seat_list.push_back(pos);
+		queue[current_no] = saved_list;
+
+		return false;
 	}
 };
 
