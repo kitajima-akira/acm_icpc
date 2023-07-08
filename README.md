@@ -29,6 +29,9 @@
  [2022年B 誰ひとり取り残さない](https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_B)* | [dom2022b/dom2022b.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2022b/dom2022b.cpp) | ○
  [2022年C ICPC に向けての練習日程](https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_C)* | [dom2022c/dom2022c.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2022c/dom2022c.cpp) | ○
  [2022年D 入場待ちの行列](https://icpc.iisf.or.jp/past-icpc/domestic2022/contest/all_ja.html#section_D)* | [dom2022d/dom2022d3.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2022d/dom2022d3.cpp) | ○
+ [2023年A スポンサー賞はどのチーム？](https://icpc.iisf.or.jp/past-icpc/domestic2023/contest/all_ja.html#section_A) | [dom2023a/dom2023a.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2023a/dom2023a.cpp) | 
+ [2023年B あみだくじ](https://icpc.iisf.or.jp/past-icpc/domestic2023/contest/all_ja.html#section_B) | [dom2023b/dom2023b.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2023b/dom2023b.cpp) | 
+ [2023年C 席替え](https://icpc.iisf.or.jp/past-icpc/domestic2023/contest/all_ja.html#section_C) | [dom2023c/dom2023c.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2023c/dom2023c.cpp) | 
 
 *はコロナ禍での特別ルール(競技中に他のソースコードを利用してよいなど)
 
