@@ -32,6 +32,7 @@
  [2023年A スポンサー賞はどのチーム？](https://icpc.iisf.or.jp/past-icpc/domestic2023/contest/all_ja.html#section_A) | [dom2023a/dom2023a.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2023a/dom2023a.cpp) | 
  [2023年B あみだくじ](https://icpc.iisf.or.jp/past-icpc/domestic2023/contest/all_ja.html#section_B) | [dom2023b/dom2023b.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2023b/dom2023b.cpp) | 
  [2023年C 席替え](https://icpc.iisf.or.jp/past-icpc/domestic2023/contest/all_ja.html#section_C) | [dom2023c/dom2023c.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2023c/dom2023c.cpp) | 
+ [2023年D 効率的な問題セット](https://icpc.iisf.or.jp/past-icpc/domestic2023/contest/all_ja.html#section_D) | [dom2023d/dom2023d.cpp](https://github.com/kitajima-akira/acm_icpc/blob/master/dom2023d/dom2023d.cpp) | 
 
 *はコロナ禍での特別ルール(競技中に他のソースコードを利用してよいなど)
 
