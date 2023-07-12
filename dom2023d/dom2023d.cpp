@@ -9,8 +9,8 @@
 using namespace std;
 
 // valuesの数値を組み合わせて(うまく選んで足すと)vになるかどうか判定する。
-// valuesは昇順を前提としている。
-bool constructable(int v, const set<int>& values) {
+// valuesはsetで、昇順となっていることを前提としている。
+bool is_constructable(int v, const set<int>& values) {
 	if (values.empty())
 		return false;
 
@@ -28,8 +28,8 @@ bool constructable(int v, const set<int>& values) {
 	copied_values.erase(copied_values.begin());
 
 	// frontを使う・使わないの両方を試す。
-	return constructable(v, copied_values)  // 使わない 
-		|| constructable(v - front, copied_values);  // 使う
+	return is_constructable(v, copied_values)  // 使わない 
+		|| is_constructable(v - front, copied_values);  // 使う
 }
 
 // 最小問題数を求める。
@@ -40,7 +40,7 @@ int get_min_problems(const set<int>& required_points) {
 
 	set<int> min_set;  // 最低限必要な点のリスト
 	for (auto v : points)
-		if (!constructable(v, min_set))
+		if (!is_constructable(v, min_set))
 			min_set.insert(v);
 
 	return min_set.size();
