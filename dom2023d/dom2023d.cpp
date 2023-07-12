@@ -17,7 +17,7 @@ bool is_constructable(int v, const set<int>& values) {
 	if (values.find(v) != values.end())
 		return true;
 
-	// valuesの先頭の要素を取り出す。
+	// valuesの先頭(最小)の要素を取り出す。
 	auto front = *values.begin();
 
 	if (front > v)
