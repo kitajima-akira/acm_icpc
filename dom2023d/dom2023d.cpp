@@ -5,20 +5,21 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <set>
 using namespace std;
 
 // valuesの数値を組み合わせて(うまく選んで足すと)vになるかどうか判定する。
 // valuesは昇順を前提としている。
-bool constructable(int v, const vector<int>& values) {
+bool constructable(int v, const set<int>& values) {
 	if (values.empty())
 		return false;
 
-	// valuesの先頭の要素を取り出す。
-	auto front = values.front();
-
-	if (front == v)
+	if (values.find(v) != values.end())
 		return true;
+
+	// valuesの先頭の要素を取り出す。
+	auto front = *values.begin();
+
 	if (front > v)
 		return false;  // valuesの残りはfrontより大きいので、もう見つからない。
 
@@ -32,15 +33,15 @@ bool constructable(int v, const vector<int>& values) {
 }
 
 // 最小問題数を求める。
-int get_min_problems(const vector<int>& required_points) {
+int get_min_problems(const set<int>& required_points) {
 	auto points = required_points;
 	// 先頭の0は除外する。
 	points.erase(points.begin());
 
-	vector<int> min_set;  // 最低限必要な点のリスト
+	set<int> min_set;  // 最低限必要な点のリスト
 	for (auto v : points)
 		if (!constructable(v, min_set))
-			min_set.push_back(v);
+			min_set.insert(v);
 
 	return min_set.size();
 }
@@ -49,10 +50,10 @@ int main() {
 	for (int n; cin >> n && n > 0;) {
 		string s;
 		cin >> s;
-		vector<int> required_points;
+		set<int> required_points;
 		for (int k = 0; k <= n; k++)
 			if (s[k] == 'o')
-				required_points.push_back(k);
+				required_points.insert(k);
 
 		cout << get_min_problems(required_points) << endl;
 
